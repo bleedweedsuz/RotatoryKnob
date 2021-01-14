@@ -1,0 +1,3 @@
+include ':RotatoryKnob'
+include ':app'
+rootProject.name = "RotatoryKnobExample"
