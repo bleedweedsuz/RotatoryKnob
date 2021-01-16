@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="RotatoryKnobView">
+        <attr name="RotatoryKnob_ImageBack" format="reference" />
+        <attr name="RotatoryKnob_ImageActive" format="reference" />
+        <attr name="RotatoryKnob_ImageInactive" format="reference" />
+        <attr name="RotatoryKnob_RotorValue" format="integer" />
+        <attr name="RotatoryKnob_MinRotorValue" format="integer" />
+        <attr name="RotatoryKnob_MaxRotorValue" format="integer" />
+        <attr name="RotatoryKnob_RotorStep" format="integer" />
+    </declare-styleable>
+
+    <integer name="RotatoryKnob_Value_Default">0</integer>
+    <integer name="RotatoryKnob_Min_Value">0</integer>
+    <integer name="RotatoryKnob_Max_Value">100</integer>
+    <integer name="RotatoryKnob_Step">1</integer>
+</resources>
