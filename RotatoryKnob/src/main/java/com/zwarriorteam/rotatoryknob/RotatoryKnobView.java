@@ -12,8 +12,8 @@ import android.widget.RelativeLayout;
 
 public class RotatoryKnobView extends RelativeLayout implements GestureDetector.OnGestureListener {
     private static final String TAG = "RotatoryKnobView";
-    public enum EventType { RotatoryKnob_EventType_OnDownMove, RotatoryKnob_EventType_OnScroll };
-    public enum Direction { CCW, CW, NONE };
+    public enum EventType { RotatoryKnob_EventType_OnDownMove, RotatoryKnob_EventType_OnScroll }
+    public enum Direction { CCW, CW, NONE }
 
     private GestureDetector gestureDetector;
     private RotatoryKnobViewListener onRotatoryKnobViewListener;
