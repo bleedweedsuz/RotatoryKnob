@@ -12,6 +12,8 @@ import android.widget.RelativeLayout;
 
 public class RotatoryKnobView extends RelativeLayout implements GestureDetector.OnGestureListener {
     private static final String TAG = "RotatoryKnobView";
+    public enum EventType { RotatoryKnob_EventType_OnDownMove, RotatoryKnob_EventType_OnScroll };
+    public enum Direction { CCW, CW, NONE };
 
     private GestureDetector gestureDetector;
     private RotatoryKnobViewListener onRotatoryKnobViewListener;
@@ -20,6 +22,8 @@ public class RotatoryKnobView extends RelativeLayout implements GestureDetector.
     private boolean knobState = false;
     private int knobBackRes, knobRotorRes_Active, knobRotorRes_InActive;
     private int rotorValue = 0, rotorStep = 1, minRotorValue = 0, maxRotorValue = 100;
+    private EventType eventType = EventType.RotatoryKnob_EventType_OnDownMove;
+    private Direction lastKnobDirection = Direction.NONE;
 
     public interface RotatoryKnobViewListener{
         void onStateChange(boolean state);
@@ -53,8 +57,7 @@ public class RotatoryKnobView extends RelativeLayout implements GestureDetector.
         minRotorValue = typedArray.getInteger(R.styleable.RotatoryKnobView_RotatoryKnob_MinRotorValue, R.integer.RotatoryKnob_Min_Value);
         maxRotorValue = typedArray.getInteger(R.styleable.RotatoryKnobView_RotatoryKnob_MaxRotorValue, R.integer.RotatoryKnob_Max_Value);
         rotorValue = typedArray.getInteger(R.styleable.RotatoryKnobView_RotatoryKnob_RotorValue, R.integer.RotatoryKnob_Value_Default);
-        //rotorLock = typedArray.getBoolean(R.styleable.RotatoryKnobView_RotatoryKnob_RotorLock, getResources().getBoolean(R.bool.RotorKnob_RotorLock));
-
+        eventType = EventType.values()[typedArray.getInt(R.styleable.RotatoryKnobView_RotatoryKnob_EventType, 0)];
         typedArray.recycle();
     }
 
@@ -88,6 +91,12 @@ public class RotatoryKnobView extends RelativeLayout implements GestureDetector.
             knobState = false;
             changeKnobStateView();
         }
+        else if(event.getAction() == MotionEvent.ACTION_MOVE){
+            if(eventType == EventType.RotatoryKnob_EventType_OnDownMove && knobState) {
+                float mouseX = event.getX(), mouseY = event.getY();
+                changeRotation(mouseX, mouseY);
+            }
+        }
         if (gestureDetector.onTouchEvent(event)) return true;
         else return super.onTouchEvent(event);
     }
@@ -109,9 +118,11 @@ public class RotatoryKnobView extends RelativeLayout implements GestureDetector.
 
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        float mouseX = e2.getX(), mouseY = e2.getY();
-        changeRotation(mouseX, mouseY);
-        return true;
+        if(eventType == EventType.RotatoryKnob_EventType_OnScroll){
+            float mouseX = e2.getX(), mouseY = e2.getY();
+            changeRotation(mouseX, mouseY);
+        }
+        return false;
     }
 
     @Override
@@ -134,9 +145,7 @@ public class RotatoryKnobView extends RelativeLayout implements GestureDetector.
     private void setRotorAngle(float angle){
         if(rkImageViewRotor !=null){
             rkImageViewRotor.setRotation(-angle);
-            if(onRotatoryKnobViewListener != null){
-                onRotatoryKnobViewListener.onRotateChange(this.rotorValue);
-            }
+            if(onRotatoryKnobViewListener != null) onRotatoryKnobViewListener.onRotateChange(this.rotorValue);
         }
     }
 
@@ -146,18 +155,19 @@ public class RotatoryKnobView extends RelativeLayout implements GestureDetector.
         if(currentTouchAngle != lastTouchAngle && lastTouchAngle != -1){
             if(currentTouchAngle > lastTouchAngle){
                 //Counter Clock Wise (CCW) Rotation
+                lastKnobDirection = Direction.CCW;
                 float newRotorAngleCalc = currentTouchAngle - lastTouchAngle;
                 rotorAngle += newRotorAngleCalc;
-                if(rotorValue > minRotorValue) rotorValue -= rotorStep;
+                if (rotorValue > minRotorValue) rotorValue -= rotorStep;
             }
             else{
                 //Clock Wise (CW) Rotation
+                lastKnobDirection = Direction.CW;
                 float newRotorAngleCalc = lastTouchAngle - currentTouchAngle;
                 rotorAngle -= newRotorAngleCalc;
                 if(rotorValue < maxRotorValue) rotorValue += rotorStep;
             }
             setRotorAngle(rotorAngle);
-            if (onRotatoryKnobViewListener != null) this.onRotatoryKnobViewListener.onRotateChange(rotorValue);
         }
         lastTouchAngle = currentTouchAngle;
     }
@@ -212,5 +222,9 @@ public class RotatoryKnobView extends RelativeLayout implements GestureDetector.
 
     public int getMaxRotorValue() {
         return maxRotorValue;
+    }
+
+    public Direction getLastKnobDirection() {
+        return lastKnobDirection;
     }
 }
