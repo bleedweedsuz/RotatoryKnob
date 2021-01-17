@@ -63,3 +63,7 @@ rotatoryKnobView.setOnRotatoryKnobViewListener(new RotatoryKnobView.RotatoryKnob
 
 ### Example For Rotatory Knob
 [Example For Rotatory Knob](https://github.com/bleedweedsuz/RotatoryKnobExample)
+
+### Upcoming Features
+- [ ] Non infinite round system using range value.
+- [ ] Add click sound for per rotor value increment or decrement.
