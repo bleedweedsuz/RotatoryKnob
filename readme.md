@@ -1,7 +1,9 @@
 ### Rotatory Knob
 Rotatory knob is a simple "Rotary Knob" system, with simple infinite rotating interface. Most of the time this type of UI is used in Volume Knob, Increment or Decrement Interface etc.
 
-##### How to use?
+![Tests Screenshot](https://github.com/bleedweedsuz/RotatoryKnob/blob/master/Screenshot/screenshot.jpg)
+
+#### How to use?
 ##### Gradle
 ```
 //1. Add it in your root build.gradle at the end of repositories
