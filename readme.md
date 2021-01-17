@@ -35,6 +35,8 @@ dependencies {
 
 ##### JAVA
 ```
+....
+String TAG = "Rotatory Knob";
 RotatoryKnobView rotatoryKnobView = findViewById(R.id.rotatoryKnobView);
 rotatoryKnobView.setOnRotatoryKnobViewListener(new RotatoryKnobView.RotatoryKnobViewListener() {
     @Override
@@ -54,4 +56,5 @@ rotatoryKnobView.setOnRotatoryKnobViewListener(new RotatoryKnobView.RotatoryKnob
         Log.d(TAG, rotatoryKnobView.getRotorStep() + " :Knob");
     }
 });
+....
 ```
