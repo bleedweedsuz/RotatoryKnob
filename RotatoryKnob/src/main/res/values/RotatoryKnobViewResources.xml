@@ -4,8 +4,8 @@
         <attr name="RotatoryKnob_ImageBack" format="reference" />
         <attr name="RotatoryKnob_ImageActive" format="reference" />
         <attr name="RotatoryKnob_ImageInactive" format="reference" />
-        <attr name="knobRotorTapButtonRes_ImageActive" format="reference" />
-        <attr name="knobRotorTapButtonRes_ImageInActive" format="reference" />
+        <attr name="RotatoryKnobTap_ImageActive" format="reference" />
+        <attr name="RotatoryKnobTap_ImageInActive" format="reference" />
         <attr name="RotatoryKnob_RotorValue" format="integer" />
         <attr name="RotatoryKnob_TapEnable" format="boolean"/>
         <attr name="RotatoryKnob_MinRotorValue" format="integer" />

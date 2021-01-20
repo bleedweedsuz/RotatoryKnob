@@ -26,9 +26,16 @@ dependencies {
     android:layout_width="100dp"
     android:layout_height="100dp"
 
+    app:RotatoryKnob_TapEnable="true"
+    app:RotatoryKnob_KnobTapSize="40dp"
+
     app:RotatoryKnob_ImageBack="@drawable/knob_back"
     app:RotatoryKnob_ImageActive="@drawable/knob_active"
     app:RotatoryKnob_ImageInactive="@drawable/knob_inactive"
+
+    app:RotatoryKnobTap_ImageActive="@drawable/tap_active"
+    app:RotatoryKnobTap_ImageInActive="@drawable/tap_inactive"
+
     app:RotatoryKnob_MaxRotorValue="100"
     app:RotatoryKnob_MinRotorValue="0"
     app:RotatoryKnob_RotorStep="1"
@@ -57,6 +64,12 @@ rotatoryKnobView.setOnRotatoryKnobViewListener(new RotatoryKnobView.RotatoryKnob
         Log.d(TAG, rotatoryKnobView.getRotorAngle() + " :Knob");
         Log.d(TAG, rotatoryKnobView.getRotorStep() + " :Knob");
     }
+
+    @Override
+    public void onTap(boolean isTap) {
+        Log.e(TAG, isTap + " Knob Tap");
+        rotatoryText.setText(isTap?"Tap":"UnTap");
+    }
 });
 ....
 ```
@@ -67,4 +80,4 @@ rotatoryKnobView.setOnRotatoryKnobViewListener(new RotatoryKnobView.RotatoryKnob
 ### Upcoming Features
 - [ ] Non infinite rotary knob using range value[a-b].
 - [ ] Add click sound for per rotor value increment or decrement.
-- [ ] Tap system in rotary knob, using circle radius system.
+- [x] Tap system in rotary knob, using circle radius system.

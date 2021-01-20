@@ -57,8 +57,8 @@ public class RotatoryKnobView extends RelativeLayout implements GestureDetector.
         knobRotorRes_Active  = typedArray.getResourceId(R.styleable.RotatoryKnobView_RotatoryKnob_ImageActive, R.drawable.light_knob_rotor);
         knobRotorRes_InActive  = typedArray.getResourceId(R.styleable.RotatoryKnobView_RotatoryKnob_ImageInactive, R.drawable.light_knob_rotor_inactive);
 
-        knobRotorTapButtonRes_Active  = typedArray.getResourceId(R.styleable.RotatoryKnobView_knobRotorTapButtonRes_ImageActive, R.drawable.knob_rotor_btn_active);
-        knobRotorTapButtonRes_InActive  = typedArray.getResourceId(R.styleable.RotatoryKnobView_knobRotorTapButtonRes_ImageInActive, R.drawable.knob_rotor_btn_inactive);
+        knobRotorTapButtonRes_Active  = typedArray.getResourceId(R.styleable.RotatoryKnobView_RotatoryKnobTap_ImageActive, R.drawable.knob_rotor_btn_active);
+        knobRotorTapButtonRes_InActive  = typedArray.getResourceId(R.styleable.RotatoryKnobView_RotatoryKnobTap_ImageInActive, R.drawable.knob_rotor_btn_inactive);
 
         isTapKnob = typedArray.getBoolean(R.styleable.RotatoryKnobView_RotatoryKnob_TapEnable, true);
 
