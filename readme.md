@@ -16,7 +16,7 @@ allprojects {
 
 //2. Add the dependency
 dependencies {
-    implementation 'com.github.bleedweedsuz:RotatoryKnob:0.02'
+    implementation 'com.github.bleedweedsuz:RotatoryKnob:0.03'
 }
 ```
 
