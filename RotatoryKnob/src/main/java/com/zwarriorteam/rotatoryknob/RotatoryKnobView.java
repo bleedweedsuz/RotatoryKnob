@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -17,10 +18,10 @@ public class RotatoryKnobView extends RelativeLayout implements GestureDetector.
 
     private GestureDetector gestureDetector;
     private RotatoryKnobViewListener onRotatoryKnobViewListener;
-    ImageView rkImageViewBack = null, rkImageViewRotor = null;
-    private float lastTouchAngle = -1f, rotorAngle = 0;
-    private boolean knobState = false;
-    private int knobBackRes, knobRotorRes_Active, knobRotorRes_InActive;
+    ImageView rkImageViewBack = null, rkImageViewRotor = null, knobRotorTapButton = null;
+    private float lastTouchAngle = -1f, rotorAngle = 0, tapKnobRadius = 50;
+    private boolean knobState = false, knobTapState = false, isTapKnob = true;
+    private int knobBackRes, knobRotorRes_Active, knobRotorRes_InActive, knobRotorTapButtonRes_Active, knobRotorTapButtonRes_InActive;
     private int rotorValue = 0, rotorStep = 1, minRotorValue = 0, maxRotorValue = 100;
     private EventType eventType = EventType.RotatoryKnob_EventType_OnDownMove;
     private Direction lastKnobDirection = Direction.NONE;
@@ -28,6 +29,7 @@ public class RotatoryKnobView extends RelativeLayout implements GestureDetector.
     public interface RotatoryKnobViewListener{
         void onStateChange(boolean state);
         void onRotateChange(int rotorValue);
+        void onTap(boolean isTap);
     }
 
     public RotatoryKnobView(Context context) {
@@ -47,17 +49,25 @@ public class RotatoryKnobView extends RelativeLayout implements GestureDetector.
         this.setRotorValue(rotorValue);
     }
 
+    @SuppressLint("ResourceAsColor")
     private void readAttributes(Context context, AttributeSet attrs){
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RotatoryKnobView);
         knobBackRes = typedArray.getResourceId(R.styleable.RotatoryKnobView_RotatoryKnob_ImageBack, R.drawable.light_knob_back);
+
         knobRotorRes_Active  = typedArray.getResourceId(R.styleable.RotatoryKnobView_RotatoryKnob_ImageActive, R.drawable.light_knob_rotor);
         knobRotorRes_InActive  = typedArray.getResourceId(R.styleable.RotatoryKnobView_RotatoryKnob_ImageInactive, R.drawable.light_knob_rotor_inactive);
+
+        knobRotorTapButtonRes_Active  = typedArray.getResourceId(R.styleable.RotatoryKnobView_knobRotorTapButtonRes_ImageActive, R.drawable.knob_rotor_btn_active);
+        knobRotorTapButtonRes_InActive  = typedArray.getResourceId(R.styleable.RotatoryKnobView_knobRotorTapButtonRes_ImageInActive, R.drawable.knob_rotor_btn_inactive);
+
+        isTapKnob = typedArray.getBoolean(R.styleable.RotatoryKnobView_RotatoryKnob_TapEnable, true);
 
         rotorStep = typedArray.getInteger(R.styleable.RotatoryKnobView_RotatoryKnob_RotorStep, R.integer.RotatoryKnob_Step);
         minRotorValue = typedArray.getInteger(R.styleable.RotatoryKnobView_RotatoryKnob_MinRotorValue, R.integer.RotatoryKnob_Min_Value);
         maxRotorValue = typedArray.getInteger(R.styleable.RotatoryKnobView_RotatoryKnob_MaxRotorValue, R.integer.RotatoryKnob_Max_Value);
         rotorValue = typedArray.getInteger(R.styleable.RotatoryKnobView_RotatoryKnob_RotorValue, R.integer.RotatoryKnob_Value_Default);
         eventType = EventType.values()[typedArray.getInt(R.styleable.RotatoryKnobView_RotatoryKnob_EventType, 0)];
+        tapKnobRadius = typedArray.getDimension(R.styleable.RotatoryKnobView_RotatoryKnob_KnobTapSize , R.dimen.RotatoryKnobTap_Size);
         typedArray.recycle();
     }
 
@@ -76,6 +86,33 @@ public class RotatoryKnobView extends RelativeLayout implements GestureDetector.
             RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
             layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
             addView(rkImageViewRotor, layoutParams);
+        }
+
+        if(isTapKnob && knobRotorTapButton == null){
+            knobRotorTapButton = new ImageView(getContext());
+            knobRotorTapButton.setImageResource(knobRotorTapButtonRes_InActive);
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams((int)RKUtils.dp2px(getContext(), tapKnobRadius), (int)RKUtils.dp2px(getContext(), tapKnobRadius));
+            layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+            addView(knobRotorTapButton, layoutParams);
+
+            //Add Listener In KnobButton
+            knobRotorTapButton.setOnTouchListener(new OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if(event.getAction() == MotionEvent.ACTION_DOWN){
+                        knobTapState = true;
+                        knobTapStateView();
+                        return true;
+                    }
+                    else if(event.getAction() == MotionEvent.ACTION_UP) {
+                        knobTapState = false;
+                        knobTapStateView();
+                        v.performClick();
+                        return true;
+                    }
+                    return false;
+                }
+            });
         }
     }
 
@@ -177,6 +214,14 @@ public class RotatoryKnobView extends RelativeLayout implements GestureDetector.
             if(knobState){ rkImageViewRotor.setImageResource(knobRotorRes_Active); }
             else{ rkImageViewRotor.setImageResource(knobRotorRes_InActive); }
             if(onRotatoryKnobViewListener != null){ this.onRotatoryKnobViewListener.onStateChange(knobState); }
+        }
+    }
+
+    private void knobTapStateView(){
+        if(knobRotorTapButton != null){
+            if(knobTapState) knobRotorTapButton.setImageResource(knobRotorTapButtonRes_Active);
+            else knobRotorTapButton.setImageResource(knobRotorTapButtonRes_InActive);
+            if(onRotatoryKnobViewListener != null) onRotatoryKnobViewListener.onTap(knobTapState);
         }
     }
 

@@ -16,9 +16,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
 
-        app:RotatoryKnob_ImageBack="@drawable/test_knob_back"
-        app:RotatoryKnob_ImageActive="@drawable/test_knob_rotor"
-        app:RotatoryKnob_ImageInactive="@drawable/test_knob_rotor_inactive"
+        app:RotatoryKnob_TapEnable="true"
+        app:RotatoryKnob_KnobTapSize="40dp"
         app:RotatoryKnob_MaxRotorValue="80"
         app:RotatoryKnob_MinRotorValue="20"
         app:RotatoryKnob_RotorStep="1"

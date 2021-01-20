@@ -4,7 +4,10 @@
         <attr name="RotatoryKnob_ImageBack" format="reference" />
         <attr name="RotatoryKnob_ImageActive" format="reference" />
         <attr name="RotatoryKnob_ImageInactive" format="reference" />
+        <attr name="knobRotorTapButtonRes_ImageActive" format="reference" />
+        <attr name="knobRotorTapButtonRes_ImageInActive" format="reference" />
         <attr name="RotatoryKnob_RotorValue" format="integer" />
+        <attr name="RotatoryKnob_TapEnable" format="boolean"/>
         <attr name="RotatoryKnob_MinRotorValue" format="integer" />
         <attr name="RotatoryKnob_MaxRotorValue" format="integer" />
         <attr name="RotatoryKnob_RotorStep" format="integer" />
@@ -12,10 +15,12 @@
             <enum name="RotatoryKnob_EventType_OnDownMove" value="0"/>
             <enum name="RotatoryKnob_EventType_OnScroll" value="1"/>
         </attr>
+        <attr name="RotatoryKnob_KnobTapSize" format="dimension"/>
     </declare-styleable>
 
     <integer name="RotatoryKnob_Value_Default">0</integer>
     <integer name="RotatoryKnob_Min_Value">0</integer>
     <integer name="RotatoryKnob_Max_Value">100</integer>
     <integer name="RotatoryKnob_Step">1</integer>
+    <dimen name="RotatoryKnobTap_Size">10dp</dimen>
 </resources>
